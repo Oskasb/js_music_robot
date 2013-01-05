@@ -1,0 +1,70 @@
+@font-face {
+    font-family: header_font;
+    src: url('../css/fonts/JungleFeverNF.ttf');
+}
+
+@font-face {
+    font-family: rich_font;
+    src: url('../css/fonts/kimbalt_.ttf');
+}
+
+body {
+    font-family: rich_font;
+    -webkit-user-select: none;
+    color: #fff;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+    top: 0px;
+    left: 0px;
+
+    right: 0px;
+    bottom: 0px;
+   /*
+    width: 760px;
+    height: 600px;
+    */
+
+}
+
+div.client {
+    overflow: hidden;
+    position:relative;
+    width: 100%;
+    height: 100%;
+}
+
+div.full_size {
+     text-align: center;
+     position:absolute;
+     top: 0px;
+     left: 0px;
+     right: 0px;
+     bottom: 0px;
+ }
+
+
+div.level_progress_container {
+    position:absolute;
+    top: -7px;
+    left: 130px;
+    right: 130px;
+    bottom: -7px;
+
+    border-left: 1px solid #ccf;
+    border-right: 1px solid #ccf;
+}
+
+
+
+
+div.screen {
+    overflow: hidden;
+    position:absolute;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}

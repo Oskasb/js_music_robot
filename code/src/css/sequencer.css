@@ -1,0 +1,247 @@
+div.sequencer_control_label {
+    font-family: verdana;
+    font-size: 9px;
+    position:absolute;
+    top:-9%;
+    width: 100%;
+    left: 0%;
+    height: 14px;
+    background-color: #000;
+}
+
+div.sequencer_offsets_parent {
+    font-family: verdana;
+    font-size: 7px;
+    position:absolute;
+    top:15%;
+    left: 2%;
+    width: 8%;
+    height: 70%;
+    background-color: #000;
+}
+
+div.sequencer_control_parent {
+    font-family: verdana;
+    font-size: 10px;
+    position:absolute;
+    padding-top: 20px;
+    top: 8%;
+    height: auto;
+    width: 18%;
+    background-color: #345;
+}
+
+div.sequencer_phrase_structure_container {
+    position:absolute;
+    text-align: center;
+    bottom: 2%;
+    height: 24%;
+    padding: 1px;
+    width: 70%;
+    right: 2%;
+    background-color: #93A5B6;
+}
+
+div.sequencer_track_config_container {
+    position:absolute;
+    text-align: center;
+    bottom: 28%;
+    height: 24%;
+    padding: 1px;
+    width: 40%;
+    right: 2%;
+    background-color: #93A5B6;
+}
+
+div.sequencer_phrase_bar_container {
+    position:relative;
+    text-align: center;
+    font-size: 7px;
+    display: inline-block;
+    margin: 0.3%;
+    height: 96%;
+    width: 5.2%;
+    background-color: #63707E;
+    -webkit-transition: background-color 1s ease-out;
+}
+
+div.sequencer_phrase_light {
+    position:absolute;
+    font-size: 7px;
+    display: inline-block;
+    height: 10%;
+    left: 20%;
+    bottom: 5%;
+    right: 20%;
+    background-color: #363;
+    -webkit-transition: background-color 1s ease-out;
+}
+
+
+
+div.sequencer_light_on {
+    background-color: #bfb;
+}
+
+div.sequencer_phrase_octave {
+    position:absolute;
+    font-size: 7px;
+    display: inline-block;
+    height: 15%;
+    left: 4%;
+    bottom: 19%;
+    right: 4%;
+    background-color: #123;
+}
+
+div.sequencer_phrase_mode {
+    position:absolute;
+    font-size: 7px;
+    display: inline-block;
+    height: 15%;
+    left: 4%;
+    bottom: 38%;
+    right: 4%;
+    background-color: #123;
+}
+
+div.sequencer_phrase_key {
+    position:absolute;
+    font-size: 7px;
+    display: inline-block;
+    height: 15%;
+    left: 4%;
+    bottom: 57%;
+    right: 4%;
+    background-color: #123;
+}
+
+div.sequencer_phrase_lead {
+    position:absolute;
+    font-size: 7px;
+    display: inline-block;
+    height: 15%;
+    left: 4%;
+    bottom: 75%;
+    right: 4%;
+    background-color: #123;
+}
+
+div.sequencer_select_button {
+    position: relative;
+    display: inline-block;
+    color: #726354;
+    margin: 1%;
+    height: 15px;
+    width: 30%;
+    -webkit-transition: all 0.3s ease-out;
+    box-shadow: 0px 0px 3px #000;
+    background-color: #CDD7DB;
+}
+
+div.sequencer_select_button:hover {
+    background-color: #f0faff;
+}
+
+div.sequencer_select_button:active {
+    background-color: #9dffdd;
+}
+
+div.sequencer_tempo_value {
+    font-family: verdana;
+    font-size: 10px;
+    position:absolute;
+    top: 14%;
+    padding-top:6%;
+    width: 25%;
+    background-color: #000;
+}
+
+div.sequencer_transpose_button_parent {
+    text-align: center;
+    display: inline-block;
+    font-family: verdana;
+    font-size: 7px;
+    position:absolute;
+    top:10%;
+    left: 2%;
+    width: 5%;
+    height: 60%;
+    box-shadow: 0px 0px 3px #000;
+}
+
+div.sequencer_tempo_controls_parent {
+    text-align: center;
+    display: inline-block;
+    font-family: verdana;
+    font-size: 7px;
+    position:absolute;
+    bottom:2%;
+    left: 1%;
+    width: 25%;
+    height: 24%;
+    box-shadow: 0px 0px 3px #000;
+}
+
+div.sequencer_mode_button_parent {
+    text-align: center;
+    display: inline-block;
+    font-family: verdana;
+
+    font-size: 9px;
+    position:absolute;
+    top:10%;
+    left: 9%;
+    width: 5%;
+    height: 60%;
+    box-shadow: 0px 0px 3px #000;
+}
+
+div.sequencer_offset_ctrl_button {
+    position:relative;
+    display: inline-block;
+    color: #726354;
+    margin: 4%;
+    width: 90%;
+    height: 7%;
+    -webkit-transition: all 0.3s ease-out;
+    box-shadow: 0px 0px 3px #000;
+    background-color: #CDD7DB;
+}
+
+div.sequencer_offset_ctrl_button:hover {
+    background-color: #f0faff;
+}
+
+div.sequencer_offset_ctrl_button:active {
+    background-color: #9dffdd;
+}
+
+div.sequencer_progress_bar {
+    position:absolute;
+    top: 0px;
+    bottom: 0px;
+    background-color: #FFA;
+    left: 0%;
+}
+
+div.sequencer_bar_progress_container {
+    text-align: center;
+    display: inline-block;
+    font-family: verdana;
+    background-color: #444;
+    font-size: 9px;
+    position:absolute;
+    bottom: 30%;
+    left: 5%;
+    right: 5%;
+    height: 5%;
+    box-shadow: 0px 0px 3px #000;
+}
+
+input.sequencer_tempo_slider {
+    position: absolute;
+    bottom: 2%;
+    left: 5%;
+    right: 5%;
+}

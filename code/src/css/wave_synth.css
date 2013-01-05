@@ -1,0 +1,89 @@
+div.wave_synth_info {
+    pointer-events: auto;
+    font-family: verdana;
+    position: absolute;
+    font-size: 7px;
+    color: #fff;
+    top: 0px;
+    bottom: 0px;
+    left: -31%;
+    width: 30%;
+    background-color: rgba(0, 0, 0, 0.5)
+}
+
+div.wave_synth_grid_frame {
+    position: absolute;
+    top: 6%;
+    bottom: 12%;
+    left: 20%;
+    right: 10%;
+    background: #165b5b;
+    background: -moz-linear-gradient(top,  #165b5b 0%, #29a09e 77%, #28b0bf 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#165b5b), color-stop(77%,#29a09e), color-stop(100%,#28b0bf));
+    background: -webkit-linear-gradient(top,  #165b5b 0%,#29a09e 77%,#28b0bf 100%);
+    background: -o-linear-gradient(top,  #165b5b 0%,#29a09e 77%,#28b0bf 100%);
+    background: -ms-linear-gradient(top,  #165b5b 0%,#29a09e 77%,#28b0bf 100%);
+    background: linear-gradient(to bottom,  #165b5b 0%,#29a09e 77%,#28b0bf 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#165b5b', endColorstr='#28b0bf',GradientType=0 );
+
+    border: 1px solid #3f8486;
+    box-shadow: 0px 0px 5px #A2D8D9;
+    -webkit-transform-style: preserve-3d;
+}
+
+div.bar_box {
+    overflow: hidden;
+     display: inline-block;
+     height: 100%;
+     position: relative;
+    -webkit-transform-style: preserve-3d;
+ }
+
+div.octave_box {
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    -webkit-transform-style: preserve-3d;
+}
+
+div.note_box {
+    overflow: hidden;
+    display: inline-block;
+    height: 100%;
+    position: relative;
+    -webkit-transform-style: preserve-3d;
+}
+
+div.key_box {
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    background: #e4f5fc;
+    background: -moz-linear-gradient(-45deg,  #e4f5fc 0%, #bfe8f9 50%, #9fd8ef 51%, #2ab0ed 100%);
+    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#e4f5fc), color-stop(50%,#bfe8f9), color-stop(51%,#9fd8ef), color-stop(100%,#2ab0ed));
+    background: -webkit-linear-gradient(-45deg,  #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 51%,#2ab0ed 100%);
+    background: -o-linear-gradient(-45deg,  #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 51%,#2ab0ed 100%);
+    background: -ms-linear-gradient(-45deg,  #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 51%,#2ab0ed 100%);
+    background: linear-gradient(135deg,  #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 51%,#2ab0ed 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4f5fc', endColorstr='#2ab0ed',GradientType=1 );
+
+
+    -webkit-transition: all 0.2s ease-out;
+    -webkit-transform-style: preserve-3d;
+}
+
+div.key_box_on {
+    background: #fff;
+    background-color: #fff;
+}
+
+div.key_box:hover {
+    background: #ccf;
+    background-color: #ccf;
+}
+
+div.key_box:active {
+    background-color: #000;
+}

@@ -1,0 +1,75 @@
+<html>
+<head>
+    <title>Space Eleven</title>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0" />
+
+
+    <link rel="stylesheet" type="text/css" href="css/main_layout.css" />
+    <link rel="stylesheet" type="text/css" href="css/menu_screens.css" />
+    <link rel="stylesheet" type="text/css" href="css/mixer.css" />
+    <link rel="stylesheet" type="text/css" href="css/wave_synth.css" />
+    <link rel="stylesheet" type="text/css" href="css/sequencer.css" />
+
+
+
+    <script type="text/javascript" src="js/Music.js"></script>
+    <script type="text/javascript" src="js/music/MusicEnums.js"></script>
+    <script type="text/javascript" src="js/music/MusicController.js"></script>
+    <script type="text/javascript" src="js/music/MusicSequencer.js"></script>
+    <script type="text/javascript" src="js/music/MusicScore.js"></script>
+    <script type="text/javascript" src="js/music/Instruments.js"></script>
+    <script type="text/javascript" src="js/music/MusicArrangement.js"></script>
+    <script type="text/javascript" src="js/music/MusicRythm.js"></script>
+    <script type="text/javascript" src="js/music/MixerUi.js"></script>
+    <script type="text/javascript" src="js/music/WaveSynth.js"></script>
+    <script type="text/javascript" src="js/music/SynthUi.js"></script>
+    <script type="text/javascript" src="js/music/SequencerUi.js"></script>
+    <script type="text/javascript" src="js/music/MusicTheory.js"></script>
+    <script type="text/javascript" src="js/music/Composer.js"></script>
+    <script type="text/javascript" src="js/music/MusicMix.js"></script>
+    <script type="text/javascript" src="js/music/MixData.js"></script>
+    <script type="text/javascript" src="js/music/PhraseData.js"></script>
+    <script type="text/javascript" src="js/music/RiffPatterns.js"></script>
+    <script type="text/javascript" src="js/music/FxUi.js"></script>
+    <script type="text/javascript" src="js/music/InstrumenRiffMaps.js"></script>
+    <script type="text/javascript" src="js/music/MusicDrummer.js"></script>
+    <script type="text/javascript" src="js/music/DrummerController.js"></script>
+    <script type="text/javascript" src="js/music/DrumSamples.js"></script>
+    <script type="text/javascript" src="js/music/DrummerPatterns.js"></script>
+
+
+    <script type="text/javascript" src="js/Client.js"></script>
+
+    <script type="text/javascript" src="js/client/Renderer.js"></script>
+    <script type="text/javascript" src="js/client/SoundManager.js"></script>
+    <script type="text/javascript" src="js/client/WebAudioPlayer.js"></script>
+
+
+    <script type="text/javascript" src="js/Input.js"></script>
+    <script type="text/javascript" src="js/input/TouchListener.js"></script>
+
+    <script type="text/javascript" src="js/Ui.js"></script>
+    <script type="text/javascript" src="js/ui/ElementData.js"></script>
+    <script type="text/javascript" src="js/ui/DomHandler.js"></script>
+    <script type="text/javascript" src="js/ui/Screen.js"></script>
+    <script type="text/javascript" src="js/ui/MenuCreator.js"></script>
+
+
+    <script type="text/javascript" src="js/Setup.js"></script>
+
+</head>
+
+
+<body id="body">
+    <div id="viewport"></div>
+
+    <script>
+        setup();
+        var finishedLoading = function() {
+            music.buildMusicUi(body)
+            ui.domHandler.removeElement(document.getElementById("viewport"))
+        };
+    </script>
+</body>
+</html>
