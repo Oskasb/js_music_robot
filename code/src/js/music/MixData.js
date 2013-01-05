@@ -50,7 +50,7 @@ MixData.prototype.mixChannlels = function(mixId) {
     this.addMixValues(mix1, channels.arp  ,  0, 0.7,    9600,     4, {Delay1:0.4, Delay2:0.7});
     this.addMixValues(mix1, channels.pluck, 50,-0.3,    1200,     1, {Delay1:0.6});
     this.addMixValues(mix1, channels.ping ,  0,   0,   12000,     1, {Delay1: 0.5});
-    this.addMixValues(mix1, channels.bell , 80,   0,   22000,     1, {});
+    this.addMixValues(mix1, channels.bell , 45,   0,   22000,     1, {});
     this.addMixValues(mix1, channels.pads , 16,-0.3,   16000,     3, {Verb1: 0.7, Delay1:0.4, Delay2:0.7});
     this.addMixValues(mix1, channels.choir, 17, 0.5,   16000,     3, {Verb2: 0.5, Delay1:0.8, Delay2:0.7});
     mixChannels[music.ENUMS.mixes.IntroMix] = mix1;
@@ -69,7 +69,7 @@ MixData.prototype.mixChannlels = function(mixId) {
     this.addMixValues(hero, channels.arp  ,  0,-0.3,    9600,     4, {Delay1:0.4, Delay2:0.7});
     this.addMixValues(hero, channels.pluck, 30, 0.3,   21200,     1, {Delay1:0.7, Delay2:0.5});
     this.addMixValues(hero, channels.ping , 20,   0,   12000,     1, {Delay1: 0.5, Delay1: 0.5});
-    this.addMixValues(hero, channels.bell , 90,   0,   22000,     1, {});
+    this.addMixValues(hero, channels.bell , 70,   0,   22000,     1, {});
     this.addMixValues(hero, channels.pads , 60,-0.3,   16000,     3, {Verb1: 0.5, Delay1:0.4, Delay2:0.7});
     this.addMixValues(hero, channels.choir, 45, 0.5,   16000,     3, {Verb1: 0.5, Delay1:0.8, Delay2:0.7});
     mixChannels[music.ENUMS.mixes.HeroMix] = hero;
@@ -137,7 +137,7 @@ MixData.prototype.mixChannlels = function(mixId) {
     this.addMixValues(mix4, channels.hat  , 70, -0.5,    13000,    5, {}       );
     this.addMixValues(mix4, channels.ohs  , 70,    0,    15000,    8, {Verb1:0.9, Verb2:0.9} );
     this.addMixValues(mix4, channels.perc , 70,    0,     6000,    3, {Verb2:0.6});
-    this.addMixValues(mix4, channels.bass , 90,    0,      930,   14, {});
+    this.addMixValues(mix4, channels.bass , 90,    0,      930,    1, {});
     this.addMixValues(mix4, channels.gtr  , 14,  0.4,     3200,  1.8, {Delay1: 0.7, Delay2:0.4, Verb2: 0.8, Verb1: 0.9} );
     this.addMixValues(mix4, channels.saw ,  40, -0.4,    14000,    2, {Delay2: 0.6});
     this.addMixValues(mix4, channels.arp  , 50,  0.4,    13000,    2, {Delay1:0.7} );
@@ -158,7 +158,7 @@ MixData.prototype.mixChannlels = function(mixId) {
     this.addMixValues(mix5, channels.hat  , 70, -0.5,    13000,    5, {}       );
     this.addMixValues(mix5, channels.ohs  , 90,    0,    15000,    3, {Verb1:0.9, Verb2:0.9} );
     this.addMixValues(mix5, channels.perc , 70,    0,     7000,    1, {Verb2:0.6});
-    this.addMixValues(mix5, channels.bass ,100,    0,      260,    9, {});
+    this.addMixValues(mix5, channels.bass ,100,    0,      260,    3, {});
     this.addMixValues(mix3, channels.gtr  , 24,  0.4,    1800,   0.8, {Delay1: 0.7, Delay2:0.4, Verb2: 0.8, Verb1: 0.9} );
     this.addMixValues(mix5, channels.saw ,  90,    0,     9000,    5, {Delay2:0.3});
     this.addMixValues(mix5, channels.arp  , 60, -0.4,    24000,    2, {Delay1:0.7} );
@@ -181,10 +181,10 @@ MixData.prototype.mixChannlels = function(mixId) {
     this.addMixValues(mix6, channels.saw ,   0,    0,     9000,    5, {Delay2:0.3});
     this.addMixValues(mix6, channels.arp  , 14, -0.4,    24000,    2, {Delay1:0.7, Delay2:0.7} );
     this.addMixValues(mix6, channels.pluck, 45,  0.3,    24000,    1, {Delay2:0.7} );
-    this.addMixValues(mix6, channels.ping , 70,  0.4,     6000,    5, {Delay1:0.7, Delay2: 0.8} );
-    this.addMixValues(mix6, channels.bell , 60,    0,    13000,    6, {});
+    this.addMixValues(mix6, channels.ping , 70,  0.4,    16000,    5, {Delay1:0.7, Delay2: 0.8} );
+    this.addMixValues(mix6, channels.bell , 50,    0,    13000,    6, {});
     this.addMixValues(mix6, channels.pads , 15,  0.6,    24000,    1, {});
-    this.addMixValues(mix6, channels.choir, 25, -0.2,    24000,    1, {}       );
+    this.addMixValues(mix6, channels.choir, 35, -0.2,    24000,    1, {}       );
     this.addMixValues(mix6, channels.ws   , 90,    0,    24000,    1, {} );
     mixChannels[music.ENUMS.mixes.PingMix] = mix6;
 

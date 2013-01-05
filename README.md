@@ -4,7 +4,6 @@ Full name: JavaScript Music Robot
 
 A music program using the web audio api and to generate music in the browser.
 
-
 Features:
 * Reasonably low memory requirement
 * mixer ui
@@ -23,8 +22,10 @@ Note: This project has been built over about 2 weeks of hobby coding and is acco
 Predicted Changes
 =================
 
-* Break out riff data from nasty structure
+* Break out mix, beat, riff and phrase data from nasty structure
+* Make use of the "setValueAtTime" function robust
 * Visualise riff data
+* Add some sort of save&load functionality
 * Fix the mode controller to follow transpose
 * Add manual mode (disabled automation)
 * Add inserts module between source and filter nodes

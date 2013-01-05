@@ -98,7 +98,7 @@ InstrumentRiffMaps.prototype.loadToneArrMaps = function() {
 
     this.loadArrTone(music.ENUMS.tones.bass ,   arr,   {octave: -1,style:"tripRiffBar5"       })
     this.loadArrTone(music.ENUMS.tones.gtr  ,   arr,   {octave: 0, style:"leadChordRiff2"     })
-    this.loadArrTone(music.ENUMS.tones.saw  ,   arr,   {octave: 0, style:"tripRiffBar5"       })
+    this.loadArrTone(music.ENUMS.tones.saw  ,   arr,   {octave: 1, style:"tripRiffBar5"       })
     this.loadArrTone(music.ENUMS.tones.hyper,   arr,   {octave: 0, style:"tripRiffBar5"       })
     this.loadArrTone(music.ENUMS.tones.pluck,   arr,   {octave: 1, style:"leadRiff3"          })
     this.loadArrTone(music.ENUMS.tones.ping ,   arr,   {octave: 1, style:"leadArpDown"        })
