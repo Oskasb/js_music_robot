@@ -139,7 +139,21 @@ MusicSequencer.prototype.getKeyTransposeValue = function(key) {
 
 };
 
+MusicSequencer.prototype.scheduleNote = function(instrument, channelId, targetFrequency, noteStartTime, velocity, duration) {
 
+    var nearestSample = this.instruments.getInstrumentFrequencyNearestSample(instrument, targetFrequency);
+    var env = this.instruments.getInstrumentEnvelope(instrument);
+
+    var sample = nearestSample[0].sample;
+
+    var pitchAdjust = nearestSample[1];
+
+    this.streamInstrumentSound(sample, pitchAdjust, noteStartTime, velocity, duration, env, channelId);
+    if (nearestSample[0].trig) {
+
+        this.streamInstrumentSound(nearestSample[0].trig, pitchAdjust, noteStartTime, velocity, duration, env, channelId);
+    }
+};
 
 MusicSequencer.prototype.pushHarmonyChordPattern = function(harmony, octave, startNote, chordPattern, instrument, barTime) {
     var barStartTime = barTime
@@ -173,22 +187,9 @@ MusicSequencer.prototype.pushHarmonyChordPattern = function(harmony, octave, sta
          //           console.log(pitchTranspose, addOctaves, key, stepOctaveShift, tones[1])
                     var mappedHalfStep = music.theory.minorKeyHalfSteps(key);
                     var targetFrequency = music.theory.getFrequencyByOctaveAndKey(octave+addOctaves, mappedHalfStep) * pitchTranspose;
-                    var nearestSample = this.instruments.getInstrumentFrequencyNearestSample(instrument, targetFrequency);
-                    var env = this.instruments.getInstrumentEnvelope(instrument);
-
                     var channelId = this.instruments.getInstrumentChannel(instrument);
+                    this.scheduleNote(instrument, channelId, targetFrequency, noteStartTime, riffTone.velocity, duration)
 
-        //            console.log(targetFrequency, nearestSample, channelId, mappedHalfStep)
-
-                    var sample = nearestSample[0].sample;
-
-                    var pitchAdjust = nearestSample[1];
-
-                    this.streamInstrumentSound(sample, pitchAdjust, noteStartTime, riffTone.velocity, duration, env, channelId);
-                    if (nearestSample[0].trig) {
-
-                        this.streamInstrumentSound(nearestSample[0].trig, pitchAdjust, noteStartTime, riffTone.velocity, duration, env, channelId);
-                    }
 
                 }
             }
@@ -228,6 +229,8 @@ MusicSequencer.prototype.pushBarPercussion = function(bar, drum, barStartTime) {
                     var velocity = drumHit[index].velocity;
                     var channelId = drumData.channel;
            //         console.log("stream: ",drumHit, index, drum)
+           //         this.scheduleNote(instrument, channelId, targetFrequency, noteStartTime, velocity, duration)
+
                     this.streamInstrumentSound(sound, 1 ,noteStartTime, velocity, duration, null, channelId)
                 }
             }

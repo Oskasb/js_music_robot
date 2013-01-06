@@ -33,7 +33,7 @@ WaveSynth.prototype.setNR = function(nr) {
 WaveSynth.prototype.setNote = function(key, octave, duration, velocity) {
     var freq = music.theory.getFrequencyByOctaveAndKey(octave, key);
     this.setFrequency(freq)
-    var source = this.startLoadedMusicSequence(this.next_frequency, duration, velocity)
+    var source = this.play(this.next_frequency, duration, velocity)
 
     return source;
 };
@@ -89,16 +89,16 @@ WaveSynth.prototype.play = function(frequency, duration, velocity) {
     var gainNode = this.context.createGainNode();
     gainNode.gain.value = 0;
 
-    music.musicMix.connectNodeToMixTrack(gainNode, music.ENUMS.instruments.ws)
+    music.musicMix.connectNodeToMixTrack(gainNode, music.ENUMS.channels.ws)
 
-    var source = this.context.createOscillator(128, 1, 1);
+    var source = this.context.createOscillator(0, 1, 1);
     source.frequency.value = frequency;
     source.connect(gainNode);
 
 
     var now = this.context.currentTime
     gainNode.gain.linearRampToValueAtTime(0 , now)
-    music.triggerEvent(music.EVENT.PLAY_CHANNEL_SOUND, music.ENUMS.instruments.ws)
+    music.triggerEvent(music.EVENT.PLAY_CHANNEL_SOUND, music.ENUMS.channels.ws)
     source.noteOn(0)
     gainNode.gain.linearRampToValueAtTime(0.9 * velocity, now+0.001)
 

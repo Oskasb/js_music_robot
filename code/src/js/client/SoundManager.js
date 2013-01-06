@@ -46,6 +46,7 @@ SoundManager.prototype.soundList = function() {
     var singleShots="assets/Loops/SingleShots/"
 
     var codec = "."+this.getCodec();
+//    var codec = "."+"ogg";
     var sounds = {
 
 

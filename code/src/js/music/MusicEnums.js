@@ -61,8 +61,7 @@ MusicEnums.prototype.instrumentValues = function() {
         ping:  "ping" ,
         bell:  "bell"  ,
         pads:  "pads"  ,
-        choir: "choir" ,
-        ws:    "ws"
+        choir: "choir"
     };
     return instruments;
 };

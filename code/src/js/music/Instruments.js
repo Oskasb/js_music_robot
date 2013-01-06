@@ -19,6 +19,16 @@ Instruments.prototype.getInstrumentChannel = function(instrument) {
     return this.samples[instrument].channel;
 };
 
+
+Instruments.prototype.getInstrumentsByChannel = function(channel) {
+    var instruments = [];
+    for (index in this.samples) {
+        var sampleChannel = this.samples[index].channel
+        if (sampleChannel == channel) instruments.push(index);
+    }
+    return instruments;
+};
+
 Instruments.prototype.getDrum = function(kit, drum) {
     return this.kits[kit][drum];
 };

@@ -127,6 +127,7 @@ MusicMix.prototype.setDelayTrackTime = function(name, time) {
 };
 
 MusicMix.prototype.connectNodeToMixTrack = function(node, trackId) {
+    console.log(this.tracks, node, trackId)
     node.connect(this.tracks[trackId].filterNode);
 };
 

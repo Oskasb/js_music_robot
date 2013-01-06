@@ -4,16 +4,17 @@ MixerUi = function() {
     this.mixerTracks = {};
     this.analyzerBars = 12;
     this.isVisible = false;
+    this.selectedTrack = music.ENUMS.channels.saw;
 };
 MixerUi.prototype.setupNavigation = function(parent) {
     music.getScore().loadPhrase("posci")
     var navParent = ui.domHandler.createDivElement(parent.id, parent.id+"nav", "", "mixer_navigation");
-    var openSynthButton = ui.domHandler.createDivElement(navParent.id, navParent.id+"synth", "synth", "mixer_nav_button");
+    var openSynthButton = ui.domHandler.createDivElement(navParent.id, navParent.id+"synth", "track", "mixer_nav_button");
     var openSequencerButton = ui.domHandler.createDivElement(navParent.id, navParent.id+"seq", "seq", "mixer_nav_button");
     var openFXGearButton = ui.domHandler.createDivElement(navParent.id, navParent.id+"fx", "FX", "mixer_nav_button");
 
-    var openSynth = function() {
-        music.mixerUi.activeModule = music.mixerUi.toggleSynthUi(openSynthButton)
+    var openInstrument = function() {
+        music.mixerUi.activeModule = music.mixerUi.toggleInstrumentCloseupUi(openSynthButton)
     };
 
     var openSeq = function() {
@@ -25,7 +26,7 @@ MixerUi.prototype.setupNavigation = function(parent) {
     };
 
     openSequencerButton.addEventListener("click", openSeq, false);
-    openSynthButton.addEventListener("click", openSynth, false);
+    openSynthButton.addEventListener("click", openInstrument, false);
     openFXGearButton.addEventListener("click", openFX, false);
 
 };
@@ -45,20 +46,20 @@ MixerUi.prototype.toggleModuleUi = function(openModuleButton) {
     return music.fxUi.openModule(this.moduleParent)
 };
 
-MixerUi.prototype.toggleSynthUi = function(openSynthButton) {
+MixerUi.prototype.toggleInstrumentCloseupUi = function(button) {
     if (this.moduleParent) {
 
         ui.domHandler.removeDivElement(this.moduleParent);
         this.activeNavButton.style.borderColor = "#7797ac";
         delete this.moduleParent;
         this.activeModule = null;
-        if (this.activeNavButton == openSynthButton)return;
+        if (this.activeNavButton == button)return;
     }
-    this.activeNavButton = openSynthButton;
-    openSynthButton.style.borderColor = "#def";
+    this.activeNavButton = button;
+    button.style.borderColor = "#def";
     this.moduleParent = ui.domHandler.createDivElement(this.boardParent.id, this.boardParent.id+"moduleParent", "", "mixer_module_parent");
-    var synth = client.soundPlayer.getWaveSynth(music.ENUMS.instruments.ws)
-    return music.synthUi.openSynth(synth, this.moduleParent)
+
+    return music.instrumentCloseupUi.openChannelCloseup(this.moduleParent)
 };
 
 MixerUi.prototype.toggleSeqUi = function(openSequencerButton) {
@@ -135,6 +136,14 @@ MixerUi.prototype.setupTracks = function(parent, tracks) {
 
         var faderParent = this.addChannelVolumeFader(mixerTracks, trackId, value)
         mixerTracks[trackId].trackLabel = ui.domHandler.createDivElement(trackParent.id, trackParent.id+"_label", trackId, "mixer_track_label");
+        mixerTracks[trackId].trackLabel.value = trackId;
+
+        var selectTrackFunc = function(e) {
+            music.mixerUi.setSelectedTrack(e.srcElement.value)
+        };
+
+        ui.addElementClickFunction(mixerTracks[trackId].trackLabel, selectTrackFunc);
+
         var panSlider = this.addChannelPanSlider(faderParent, mixerTracks, trackId, tracks[trackId].filterNode)
 
 
@@ -204,7 +213,7 @@ MixerUi.prototype.addChannelPanSlider = function(parent, mixerTracks, trackId, n
         music.musicMix.setTrackPan(track, value*0.01)
     }
 
-     var inputElem = ui.domHandler.createSliderInputElement(panContainer.id, panContainer.id+"_slider", trackId, "pan", value, min, max, slideFunc, "mixer_pan_slider");
+    var inputElem = ui.domHandler.createSliderInputElement(panContainer.id, panContainer.id+"_slider", trackId, "pan", value, min, max, slideFunc, "mixer_pan_slider");
 
 };
 
@@ -321,7 +330,13 @@ MixerUi.prototype.addAnalyzerBars = function(mixerTracks, trackId) {
 
 };
 
+MixerUi.prototype.setSelectedTrack = function(instrument) {
+    this.selectedTrack = instrument;
+};
 
+MixerUi.prototype.getSelectedTrack = function() {
+    return this.selectedTrack;
+};
 
 
 MixerUi.prototype.updateTrackAnalyserFeedback = function(track) {
@@ -373,7 +388,14 @@ MixerUi.prototype.updateTransportVisuals = function() {
     this.currentTrack.innerHTML = music.musicController.getCurrentTrackId();
 };
 
+MixerUi.prototype.showCurrentSelectedTrack = function() {
+    if (this.visibleSelectedTrack == this.selectedTrack) return;
 
+    this.mixerTracks[this.selectedTrack].trackLabel.style.color = "#bfb";
+    if (this.visibleSelectedTrack) this.mixerTracks[this.visibleSelectedTrack].trackLabel.style.color = "";
+    this.visibleSelectedTrack = this.selectedTrack;
+
+};
 
 MixerUi.prototype.updateTrackControlVisuals = function(track) {
     var mixValues = music.musicMix.getTrackMix(track.id);
@@ -408,6 +430,7 @@ MixerUi.prototype.updateControlVisuals = function() {
         this.updateTrackControlVisuals(this.mixerTracks[index]);
 
     };
+    this.showCurrentSelectedTrack();
     this.updateTransportVisuals();
     if (!client.soundPlayer.isPowerful) return;
     for (index in this.mixerTracks) {
