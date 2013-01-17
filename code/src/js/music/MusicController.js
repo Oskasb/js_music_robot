@@ -77,7 +77,7 @@ MusicController.prototype.pushNextTrackToSequencer = function() {
 };
 
 MusicController.prototype.startLoadedMusicSequence = function() {
-    if (this.isPlaying) this.stopMusicSequence();
+    if (this.isPlaying) return // this.stopMusicSequence();
     this.isPlaying = true;
     this.loadNextBarScoreTrack();
     music.musicSequencer.startSequence();

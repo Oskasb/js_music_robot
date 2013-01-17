@@ -3,7 +3,7 @@ webAudioPlayer = function() {
     this.waveSynths = {};
     this.loops = {};
     this.effects = {};
-    this.isPowerful = false;
+    this.isPowerful = this.checkClientPower();
     this.tracks = {}
 };
 
@@ -11,7 +11,13 @@ webAudioPlayer.prototype.getTracks = function() {
     return this.tracks;
 };
 
-
+webAudioPlayer.prototype.checkClientPower = function() {
+    if (client.getDeviceProperties().DeviceType == "iPad" || client.getDeviceProperties().DeviceType == "iPhone") {
+        return false;
+    } else {
+        return true;
+    }
+};
 
 webAudioPlayer.prototype.setupPlayer = function(context, sounds) {
     this.context = context;
@@ -19,13 +25,9 @@ webAudioPlayer.prototype.setupPlayer = function(context, sounds) {
     this.setupChannels();
     this.setupMusicTracks();
     this.createWaveSynth(music.ENUMS.instruments.ws);
-    if (client.getDeviceProperties().DeviceType == "iPad" || client.getDeviceProperties().DeviceType == "iPhone") {
-        this.isPowerful = false;
-    } else {
-        this.isPowerful = true;
+    if (this.isPowerful) {
         this.setupEffects();
     }
-
 };
 
 webAudioPlayer.prototype.playAmbientSound = function(id) {
