@@ -3,7 +3,7 @@ webAudioPlayer = function() {
     this.waveSynths = {};
     this.loops = {};
     this.effects = {};
-    this.isPowerful = true;
+    this.isPowerful = false;
     this.tracks = {}
 };
 
@@ -19,7 +19,12 @@ webAudioPlayer.prototype.setupPlayer = function(context, sounds) {
     this.setupChannels();
     this.setupMusicTracks();
     this.createWaveSynth(music.ENUMS.instruments.ws);
-
+    if (client.getDeviceProperties().DeviceType == "iPad" || client.getDeviceProperties().DeviceType == "iPhone") {
+        this.isPowerful = false;
+    } else {
+        this.isPowerful = true;
+        this.setupEffects();
+    }
 
 };
 
@@ -34,13 +39,15 @@ webAudioPlayer.prototype.playAmbientSound = function(id) {
 };
 
 webAudioPlayer.prototype.stopAmbientSound = function(id) {
-//    console.log("Stop Loop: ", id, this.loops)
+    var now = this.context.currentTime;
+    var release = 0.1;
     if (!this.loops[id]) {
         alert("id: "+id+" is not a loop, cant stop")
         return
     }
-
-    this.loops[id].noteOff(0);
+    var source = this.loops[id]
+    source.gain.linearRampToValueAtTime( 0, now+release);
+    source.noteOff( now+release+release);
     delete this.loops[id];
 };
 
@@ -88,9 +95,9 @@ webAudioPlayer.prototype.stopMusic = function(id, time) {
     this.playingMusicSources[id].gain.linearRampToValueAtTime( 0,  time  )
     var instance = this;
     setTimeout(function() {
-         instance.playingMusicSources[id].noteOff(0);
-         instance.stopAmbientSound(id);
-         delete instance.playingMusicSources[id];
+        instance.playingMusicSources[id].noteOff(0);
+        instance.stopAmbientSound(id);
+        delete instance.playingMusicSources[id];
     }, time*1010);
 };
 
@@ -117,15 +124,27 @@ webAudioPlayer.prototype.playSound = function(id, time) {
         source.playbackRate.value = 1 + ((-opts.mod.p*0.5) + (Math.random()*opts.mod.p));
         source.gain.value = this.sounds[id].data.gain + ((-opts.mod.g*0.5) + (Math.random()*opts.mod.g));
     }
+//    console.log("Sound Data: ",this.sounds[id])
+    if (opts.fx && this.isPowerful) {
+        for (index in opts.fx) {
+            this.connectSourceToEffect(source, index, opts.fx[index])
+        }
 
-    this.connectSourceToChannel(source, this.sounds[id].data, time);
+        if (opts.fx.delay) {
+
+        } else {
+            this.connectSourceToChannel(source, this.sounds[id].data, time);
+        }
+    } else {
+        this.connectSourceToChannel(source, this.sounds[id].data, time);
+    }
 
     return source;
 };
 
 webAudioPlayer.prototype.connectSourceToEffect = function(source, effect, level) {
     effect = this.effects[effect];
- //   console.log("connect: ",effect)
+    //   console.log("connect: ",effect)
     source.connect(effect);
 };
 
@@ -217,10 +236,10 @@ webAudioPlayer.prototype.setupDelay = function() {
     this.effects.delay.delayTime.value = 0.000;
     this.effects.delay2.delayTime.value = 0.012;
 
- //
- //   this.effects.left = this.context.createGainNode();
+    //
+    //   this.effects.left = this.context.createGainNode();
 
- //   this.effects.delay.connect(this.effects.right)
+    //   this.effects.delay.connect(this.effects.right)
     this.effects.delay.connect(this.effects.delay2);
     this.effects.delay.connect(this.effects.left)
 //    this.effects.delay2.connect(this.effects.left)
@@ -232,7 +251,7 @@ webAudioPlayer.prototype.setupDelay = function() {
 
 
 
- //   console.log(this.effects)
+    //   console.log(this.effects)
 }
 
 

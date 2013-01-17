@@ -93,7 +93,7 @@ input.knob_slider {
     margin: 0px;
     opacity: 0.1;
     top: 0px;
-    bottom: 0px;
+    height: 100%;
     left: 0px;
     width: 100%;
     -webkit-appearance: slider-vertical;

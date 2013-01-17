@@ -86,7 +86,7 @@ MusicSequencer.prototype.startSequence = function() {
     this.playing = true;
     this.getScore().setBarNr(-1)
 
-    client.soundPlayer.setChannelGain("music", 0.3, 0);
+    client.soundPlayer.setChannelGain("music", 0.1, 0);
 
     this.setSequenceStartTime(this.getAudioTime());
     this.setupBar(this.getScoreTime());
@@ -103,8 +103,8 @@ MusicSequencer.prototype.cancelSequence = function() {
 };
 
 MusicSequencer.prototype.prepareNextSynchronizedBar = function(time) {
-        music.musicMix.updateBeatTime(this.secondsPerBeat(this.getScoreNextBarTempo()));
-        this.setupBar(time);
+    music.musicMix.updateBeatTime(this.secondsPerBeat(this.getScoreNextBarTempo()));
+    this.setupBar(time);
 
 
 };
@@ -139,21 +139,7 @@ MusicSequencer.prototype.getKeyTransposeValue = function(key) {
 
 };
 
-MusicSequencer.prototype.scheduleNote = function(instrument, channelId, targetFrequency, noteStartTime, velocity, duration) {
 
-    var nearestSample = this.instruments.getInstrumentFrequencyNearestSample(instrument, targetFrequency);
-    var env = this.instruments.getInstrumentEnvelope(instrument);
-
-    var sample = nearestSample[0].sample;
-
-    var pitchAdjust = nearestSample[1];
-
-    this.streamInstrumentSound(sample, pitchAdjust, noteStartTime, velocity, duration, env, channelId);
-    if (nearestSample[0].trig) {
-
-        this.streamInstrumentSound(nearestSample[0].trig, pitchAdjust, noteStartTime, velocity, duration, env, channelId);
-    }
-};
 
 MusicSequencer.prototype.pushHarmonyChordPattern = function(harmony, octave, startNote, chordPattern, instrument, barTime) {
     var barStartTime = barTime
@@ -175,7 +161,7 @@ MusicSequencer.prototype.pushHarmonyChordPattern = function(harmony, octave, sta
 
                 var harm = harmony.keys
                 var tones = harmony[this.instruments.getInstrumentHarmony(instrument)]
-        //        console.log(harm, tones, harmony, this.instruments.getInstrumentHarmony(instrument))
+                //        console.log(harm, tones, harmony, this.instruments.getInstrumentHarmony(instrument))
 
                 for (var k = 0; k < harm[0].length; k++) {
                     var sumKey = tones[k][0]+toneAdd
@@ -184,12 +170,25 @@ MusicSequencer.prototype.pushHarmonyChordPattern = function(harmony, octave, sta
                     var key = remainder // sumKey - (addOctaves*7)
                     var pitchTranspose = this.getKeyTransposeValue(key);
 
-         //           console.log(pitchTranspose, addOctaves, key, stepOctaveShift, tones[1])
+                    //           console.log(pitchTranspose, addOctaves, key, stepOctaveShift, tones[1])
                     var mappedHalfStep = music.theory.minorKeyHalfSteps(key);
                     var targetFrequency = music.theory.getFrequencyByOctaveAndKey(octave+addOctaves, mappedHalfStep) * pitchTranspose;
-                    var channelId = this.instruments.getInstrumentChannel(instrument);
-                    this.scheduleNote(instrument, channelId, targetFrequency, noteStartTime, riffTone.velocity, duration)
+                    var nearestSample = this.instruments.getInstrumentFrequencyNearestSample(instrument, targetFrequency);
+                    var env = this.instruments.getInstrumentEnvelope(instrument);
 
+                    var channelId = this.instruments.getInstrumentChannel(instrument);
+
+                    //            console.log(targetFrequency, nearestSample, channelId, mappedHalfStep)
+
+                    var sample = nearestSample[0].sample;
+
+                    var pitchAdjust = nearestSample[1];
+
+                    this.streamInstrumentSound(sample, pitchAdjust, noteStartTime, riffTone.velocity, duration, env, channelId);
+                    if (nearestSample[0].trig) {
+
+                        this.streamInstrumentSound(nearestSample[0].trig, pitchAdjust, noteStartTime, riffTone.velocity, duration, env, channelId);
+                    }
 
                 }
             }
@@ -221,16 +220,14 @@ MusicSequencer.prototype.pushBarPercussion = function(bar, drum, barStartTime) {
         if (rythm[note]) {
 
             for (var sequence in rythm[note]) {
-            var drumHit = rythm[note][sequence]
+                var drumHit = rythm[note][sequence]
                 var noteStartTime = this.getBarNoteStartTime(i+parseFloat(sequence), barStartTime)
                 for (index in drumHit) {
-                     var drumData = this.instruments.getDrum(music.musicSequencer.drummer.getDrumKit(), drum);
+                    var drumData = this.instruments.getDrum(music.musicSequencer.drummer.getDrumKit(), drum);
                     var sound = drumData.samples[index]
                     var velocity = drumHit[index].velocity;
                     var channelId = drumData.channel;
-           //         console.log("stream: ",drumHit, index, drum)
-           //         this.scheduleNote(instrument, channelId, targetFrequency, noteStartTime, velocity, duration)
-
+                    //         console.log("stream: ",drumHit, index, drum)
                     this.streamInstrumentSound(sound, 1 ,noteStartTime, velocity, duration, null, channelId)
                 }
             }
@@ -241,13 +238,39 @@ MusicSequencer.prototype.pushBarPercussion = function(bar, drum, barStartTime) {
 MusicSequencer.prototype.scheduleBar = function(bar, barStartTime) {
 //    console.log("BarStartTime = "+barStartTime)
 
-    for (index in bar.instruments) {
-        this.pushBarHarmonyInstruments(bar, index, barStartTime)
+    var scheduleIntervalTime = 0;
+
+    pushHarmFunc = function(bar, instrument, barStartTime, scheduleDelay) {
+        var bar = bar;
+        var instrument = instrument;
+        var barStartTime = barStartTime;
+        setTimeout(function() {
+            music.musicSequencer.pushBarHarmonyInstruments(bar, instrument, barStartTime)
+        }, scheduleDelay);
     }
 
-    for (index in bar.percussion) {
-        this.pushBarPercussion(bar, index, barStartTime)
+
+    for (var index in bar.instruments) {
+        pushHarmFunc(bar, index, barStartTime, scheduleIntervalTime)
+        scheduleIntervalTime =+ 150;
     }
+
+    pushPercFunc = function(bar, instrument, barStartTime, scheduleDelay) {
+        var bar = bar;
+        var instrument = instrument;
+        var barStartTime = barStartTime;
+        setTimeout(function() {
+            music.musicSequencer.pushBarPercussion(bar, instrument, barStartTime)
+
+        }, scheduleDelay);
+    }
+
+
+    for (var percs in bar.percussion) {
+        pushPercFunc(bar, percs, barStartTime, scheduleIntervalTime)
+        scheduleIntervalTime =+ 150;
+    }
+
 
     var now = this.getScoreTime();
     var barTime = this.getBarDuration(this.getScoreTempo());
@@ -270,7 +293,7 @@ MusicSequencer.prototype.streamInstrumentSound = function(sound, pitchTranspose,
 MusicSequencer.prototype.updateBarState = function() {
     if (this.playing == false) return;
     var remainingTime = this.getPushedBarEndTime() - this.getScoreTime();
-    if (remainingTime < 0.3) {
+    if (remainingTime < 1.3) {
 
         var startNextAtTime = this.getPushedBarEndTime();
         this.prepareNextSynchronizedBar(startNextAtTime);

@@ -59,10 +59,23 @@ MusicMix.prototype.getEffectSends = function() {
 
 MusicMix.prototype.createEffectSends = function() {
     this.effects = {};
-    this.effects[music.ENUMS.fx.Delay1] = this.createDelayEffect(0.3, [1.0, 1.5])
-    this.effects[music.ENUMS.fx.Delay2] = this.createDelayEffect(0.15, [0.50, 0.75])
-    this.effects[music.ENUMS.fx.Verb1] = this.createReverbTrack("Cave.mp3");
-    this.effects[music.ENUMS.fx.Verb2] = this.createReverbTrack("DenseRoom.mp3");
+
+    if (client.soundPlayer.isPowerful == true) {
+        this.effects[music.ENUMS.fx.Delay1] = this.createDelayEffect(0.3, [1.0, 1.5])
+
+        this.effects[music.ENUMS.fx.Delay2] = this.createDelayEffect(0.15, [0.50, 0.75])
+
+
+        this.effects[music.ENUMS.fx.Verb1] = this.createReverbTrack("Cave.mp3");
+        this.effects[music.ENUMS.fx.Verb2] = this.createReverbTrack("DenseRoom.mp3");
+    } else {
+        delete music.ENUMS.fx.Delay1;
+        delete music.ENUMS.fx.Delay2;
+        delete music.ENUMS.fx.Verb1;
+        delete music.ENUMS.fx.Verb2;
+    }
+
+
     this.updateBeatTime(2);
 };
 
@@ -120,6 +133,7 @@ MusicMix.prototype.createDelayEffect = function(feedbackGain, timings) {
 };
 
 MusicMix.prototype.setDelayTrackTime = function(name, time) {
+    if (!this.effects[name]) return;
     if (this.effects[name].delayL.delayTime.value == time*this.effects[name].timings[0]) return;
     this.effects[name].delayL.delayTime.value = time*this.effects[name].timings[0];
     this.effects[name].delayR.delayTime.value = time*this.effects[name].timings[1];
@@ -127,7 +141,6 @@ MusicMix.prototype.setDelayTrackTime = function(name, time) {
 };
 
 MusicMix.prototype.connectNodeToMixTrack = function(node, trackId) {
-    console.log(this.tracks, node, trackId)
     node.connect(this.tracks[trackId].filterNode);
 };
 
@@ -137,19 +150,20 @@ MusicMix.prototype.addTrackToMix = function(trackId, isPowerful) {
     var track = this.tracks[trackId]
 
     track.filterNode = this.context.createBiquadFilter();
-
+    track.gainNode = this.context.createGainNode();
+    track.filterNode.connect(track.gainNode);
     if (isPowerful) {
         track.analyzerNode = this.context.createAnalyser();
         track.analyzerNode.frequencyBinCount = 256;
         track.analyzerNode.smoothingTimeConstant = 0.2;
+        track.gainNode.connect(track.analyzerNode);
     };
 
-    track.gainNode = this.context.createGainNode();
-    track.filterNode.connect(track.gainNode);
-    track.gainNode.connect(track.analyzerNode);
+
+
     track.panNode = this.buildStereoChannelSplitter(track.gainNode);
     track.panNode.setPosition(0, this.context.currentTime);
-  //  track.gainNode.connect(track.panNode);
+    //  track.gainNode.connect(track.panNode);
 //    track.gainNode.connect(client.soundPlayer.channels["music"]);
     track.panNode.connect(client.soundPlayer.channels["music"]);
     this.setTrackToDefaultMix(trackId)
@@ -197,7 +211,6 @@ MusicMix.prototype.getTracks = function() {
 
 
 MusicMix.prototype.setTrackToDefaultMix = function(track) {
-    console.log(track, this.defaultMix())
     var mix = this.defaultMix();
     this.tracks[track].fxSends = {};
     this.setTrackMix(track, mix, this.context.currentTime);
@@ -222,7 +235,7 @@ MusicMix.prototype.setTrackMix = function(track, mix, time) {
 };
 
 MusicMix.prototype.setTrackFx = function(track, fx, time) {
- //   console.log("Set Track FX:", track, fx)
+    //   console.log("Set Track FX:", track, fx)
     for (index in music.ENUMS.fx) {
         if (fx[index]) {
             if (!this.tracks[track].fxSends[music.ENUMS.fx[index]]) {

@@ -9,6 +9,10 @@ Client.prototype.initScript = function() {
     this.soundPlayer = new webAudioPlayer();
 };
 
+Client.prototype.getDeviceProperties = function() {
+    return viewporter.deviceProperties;
+}
+
 Client.prototype.getClientTime = function() {
     return this.soundPlayer.context.currentTime * 1000;
 };
