@@ -94,7 +94,7 @@ MusicSequencer.prototype.startSequence = function() {
 
 
 MusicSequencer.prototype.stopSequence = function() {
-    client.soundPlayer.setChannelGain("music", 0, 1);
+//    client.soundPlayer.setChannelGain("music", 0, 1);
     this.cancelSequence();
 };
 
@@ -185,7 +185,7 @@ MusicSequencer.prototype.pushHarmonyChordPattern = function(harmony, octave, sta
                     var pitchAdjust = nearestSample[1];
 
                     this.streamInstrumentSound(sample, pitchAdjust, noteStartTime, riffTone.velocity, duration, env, channelId);
-                    if (nearestSample[0].trig) {
+                    if (nearestSample[0].trig && client.soundPlayer.isPowerful == true) {
 
                         this.streamInstrumentSound(nearestSample[0].trig, pitchAdjust, noteStartTime, riffTone.velocity, duration, env, channelId);
                     }

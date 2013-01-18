@@ -11,12 +11,31 @@ Renderer.prototype.setupRenderLoop = function() {
      this.render(client.getClientTime());
 };
 
+
+
 Renderer.prototype.render = function(lastFrameTime) {
     var instance = this;
 
-    webkitRequestAnimationFrame(function() {
+    /*
+    if (requestAnimationFrame) {
+        requestAnimationFrame(function() {
+            instance.renderFrame(lastFrameTime);
+        })
+        return
+    }
+    if (webkitRequestAnimationFrame) {
+        webkitRequestAnimationFrame(function() {
+            instance.renderFrame(lastFrameTime);
+        })
+        return
+    }
+    */
+
+    setTimeout(function() {
         instance.renderFrame(lastFrameTime);
     })
+
+
 };
 
 Renderer.prototype.renderFrame = function(lastFrameTime) {

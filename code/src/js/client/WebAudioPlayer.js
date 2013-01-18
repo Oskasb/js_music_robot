@@ -15,6 +15,7 @@ webAudioPlayer.prototype.checkClientPower = function() {
     if (client.getDeviceProperties().DeviceType == "iPad" || client.getDeviceProperties().DeviceType == "iPhone") {
         return false;
     } else {
+        return false;
         return true;
     }
 };
@@ -81,10 +82,11 @@ webAudioPlayer.prototype.playMusic = function(id, pitchTranspose, time, fadeIn, 
 
 
 
-    setTimeout(function() {
-        music.triggerEvent(music.EVENT.PLAY_CHANNEL_SOUND, channelId)
-
-    }, (time-now)*1000)
+    if(client.soundPlayer.isPowerful == true) {
+        setTimeout(function() {
+           music.triggerEvent(music.EVENT.PLAY_CHANNEL_SOUND, channelId)
+        }, (time-now)*1000)
+    }
 
     return id;
 };

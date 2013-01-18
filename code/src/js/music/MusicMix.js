@@ -148,24 +148,31 @@ MusicMix.prototype.addTrackToMix = function(trackId, isPowerful) {
     this.tracks[trackId] = {};
 
     var track = this.tracks[trackId]
-
-    track.filterNode = this.context.createBiquadFilter();
     track.gainNode = this.context.createGainNode();
-    track.filterNode.connect(track.gainNode);
+
+
     if (isPowerful) {
+        track.filterNode = this.context.createBiquadFilter();
+        track.filterNode.connect(track.gainNode);
         track.analyzerNode = this.context.createAnalyser();
         track.analyzerNode.frequencyBinCount = 256;
         track.analyzerNode.smoothingTimeConstant = 0.2;
         track.gainNode.connect(track.analyzerNode);
+        track.panNode = this.buildStereoChannelSplitter(track.gainNode);
+        track.panNode.setPosition(0, this.context.currentTime);
+        track.panNode.connect(client.soundPlayer.channels["music"]);
+
+    } else {
+
+        track.filterNode = track.gainNode
+        track.filterNode.frequency = {linearRampToValueAtTime:function() {}};
+        track.filterNode.Q = {linearRampToValueAtTime:function() {}};
+        track.panNode = {
+            setPosition:function() {}
+        };
+        track.gainNode.connect(client.soundPlayer.channels["music"]);
     };
 
-
-
-    track.panNode = this.buildStereoChannelSplitter(track.gainNode);
-    track.panNode.setPosition(0, this.context.currentTime);
-    //  track.gainNode.connect(track.panNode);
-//    track.gainNode.connect(client.soundPlayer.channels["music"]);
-    track.panNode.connect(client.soundPlayer.channels["music"]);
     this.setTrackToDefaultMix(trackId)
 };
 

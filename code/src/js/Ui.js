@@ -42,7 +42,7 @@ Ui.prototype.addElementClickFunction = function(element, cFunc) {
     ui.registerInputSoundElement(element, "ui_hover", "ui_active", "ui_click", "ui_out");
  //   element.onclick = cFunc
     element.addEventListener("click", cFunc)
-    element.addEventListener("touchClick", cFunc)
+//    element.addEventListener("touchClick", cFunc)
 };
 
 Ui.prototype.getElementStructure = function(elementId) {
