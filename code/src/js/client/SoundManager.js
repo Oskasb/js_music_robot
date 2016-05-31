@@ -3,7 +3,7 @@ SoundManager = function() {
 };
 
 SoundManager.prototype.setupContext = function() {
-    this.context = new webkitAudioContext();
+    this.context = new AudioContext();
     var codec = this.determineCodec()
     this.setCodec(codec);
 };

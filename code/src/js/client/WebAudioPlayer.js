@@ -3,7 +3,7 @@ webAudioPlayer = function() {
     this.waveSynths = {};
     this.loops = {};
     this.effects = {};
-    this.isPowerful = this.checkClientPower();
+    this.isPowerful = true // this.checkClientPower();
     this.tracks = {}
 };
 
@@ -34,7 +34,7 @@ webAudioPlayer.prototype.setupPlayer = function(context, sounds) {
 webAudioPlayer.prototype.playAmbientSound = function(id) {
     console.log("Play Ambient: "+id)
     if (this.loops[id]) {
-        this.loops[id].noteOn(0)
+        this.loops[id].start(0)
     } else {
         this.playSound(id)
     }
@@ -50,22 +50,22 @@ webAudioPlayer.prototype.stopAmbientSound = function(id) {
     }
     var source = this.loops[id]
     source.gain.linearRampToValueAtTime( 0, now+release);
-    source.noteOff( now+release+release);
+    source.stop( now+release+release);
     delete this.loops[id];
 };
 
 webAudioPlayer.prototype.playMusic = function(id, pitchTranspose, time, fadeIn, velocity, duration, env, channelId) {
     var now = this.context.currentTime;
 //    console.log(id, this.sounds)
-    var opts = this.sounds[id].data.options
+    var opts = this.sounds[id].data.options;
 
     var source = this.playSound(id, time);
-    var channel = music.musicMix.getTrack(channelId).filterNode
+    var channel = music.musicMix.getTrack(channelId).filterNode;
 
-    source.connect(channel);
-    source.noteOn(time)
+    source.gainNode.connect(channel);
+    source.start(time)
     source.playbackRate.value = pitchTranspose;
-    source.gain.linearRampToValueAtTime( 0,  now)
+    source.gain.linearRampToValueAtTime( 0,  now);
 
     if (opts.grain) {
         fadeIn = env.a;
@@ -73,8 +73,8 @@ webAudioPlayer.prototype.playMusic = function(id, pitchTranspose, time, fadeIn, 
 
         setTimeout(function() {
             source.gain.linearRampToValueAtTime( 0, time + duration+release);
+            source.stop(time + duration+release)
         }, (time - now + duration)*1000);
-        source.noteOff(time + duration+release)
 
     }
 
@@ -99,7 +99,7 @@ webAudioPlayer.prototype.stopMusic = function(id, time) {
     this.playingMusicSources[id].gain.linearRampToValueAtTime( 0,  time  )
     var instance = this;
     setTimeout(function() {
-        instance.playingMusicSources[id].noteOff(0);
+        instance.playingMusicSources[id].stop(0);
         instance.stopAmbientSound(id);
         delete instance.playingMusicSources[id];
     }, time*1010);
@@ -111,7 +111,13 @@ webAudioPlayer.prototype.playSound = function(id, time) {
     var source = this.context.createBufferSource();
 
     source.buffer = this.sounds[id].buffer;
-    var opts = this.sounds[id].data.options
+    var opts = this.sounds[id].data.options;
+
+    source.gainNode = this.context.createGain();
+    source.gain = source.gainNode.gain;
+
+    source.connect(source.gainNode);
+
     source.gain.value = this.sounds[id].data.gain;
     if (opts.loop) {
         source.loop = opts.loop;
@@ -149,7 +155,7 @@ webAudioPlayer.prototype.playSound = function(id, time) {
 webAudioPlayer.prototype.connectSourceToEffect = function(source, effect, level) {
     effect = this.effects[effect];
     //   console.log("connect: ",effect)
-    source.connect(effect);
+    source.gainNode.connect(effect);
 };
 
 webAudioPlayer.prototype.connectSourceToChannel = function(source, data, time) {
@@ -160,8 +166,8 @@ webAudioPlayer.prototype.connectSourceToChannel = function(source, data, time) {
         return source;
     } else {
         channel = this.channels[data.channel]
-        source.connect(channel);
-        source.noteOn(time);
+        source.gainNode.connect(channel);
+        source.start(time);
     }
 //    console.log("channel: ",data, channel)
 
@@ -199,8 +205,8 @@ webAudioPlayer.prototype.getChannelGain = function(channel) {
 webAudioPlayer.prototype.setupChannels = function() {
 
     this.channels = {
-        music: this.context.createGainNode(),
-        sfx: this.context.createGainNode()
+        music: this.context.createGain(),
+        sfx: this.context.createGain()
     };
     for (index in this.channels) {
         this.channels[index].connect(this.context.destination);
@@ -225,8 +231,8 @@ webAudioPlayer.prototype.setupEffects = function() {
 
 
 webAudioPlayer.prototype.setupDelay = function() {
-    this.effects.delay = this.context.createDelayNode();
-    this.effects.delay2 = this.context.createDelayNode();
+    this.effects.delay = this.context.createDelay();
+    this.effects.delay2 = this.context.createDelay();
 //    this.effects.delay.gain.value = 0.5;
 //    this.effects.delay2.gain.value = 0.5;
     this.effects.left = this.context.createPanner();
@@ -261,7 +267,7 @@ webAudioPlayer.prototype.setupDelay = function() {
 
 webAudioPlayer.prototype.setupReverb = function() {
     this.effects.reverb = this.context.createConvolver();
-    this.effects.reverbGain = this.context.createGainNode();
+    this.effects.reverbGain = this.context.createGain();
     this.effects.reverbGain.gain.value = 0.4;
     var instance = this;
     var request = new XMLHttpRequest();
@@ -269,7 +275,13 @@ webAudioPlayer.prototype.setupReverb = function() {
     request.responseType = "arraybuffer";
 
     request.onload = function () {
-        instance.effects.reverb.buffer = instance.context.createBuffer(request.response, false);
+        var audioData = request.response;
+        instance.context.decodeAudioData(audioData, function(buffer) {
+            concertHallBuffer = buffer;
+            soundSource = instance.context.createBufferSource();
+            soundSource.buffer = concertHallBuffer;
+            instance.effects.reverb.buffer = buffer;
+        }, function(e){"Error with decoding audio data" + e.err});
     }
     request.send();
 

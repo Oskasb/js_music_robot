@@ -94,8 +94,17 @@ MusicMix.prototype.createReverbTrack = function(convo) {
     request.responseType = "arraybuffer";
 
     request.onload = function () {
-        reverb.buffer = instance.context.createBuffer(request.response, false);
+        var audioData = request.response;
+        instance.context.decodeAudioData(audioData, function(buffer) {
+            concertHallBuffer = buffer;
+            soundSource = instance.context.createBufferSource();
+            soundSource.buffer = concertHallBuffer;
+            reverb.buffer = buffer;
+        }, function(e){"Error with decoding audio data" + e.err});
     }
+
+  //      reverb.buffer = instance.context.createBufferSource(request.response, false);
+  //  }
     request.send();
 
 //    reverb.buffer = client.soundManager.sounds[convo].buffer
@@ -104,13 +113,13 @@ MusicMix.prototype.createReverbTrack = function(convo) {
 };
 
 MusicMix.prototype.createDelayEffect = function(feedbackGain, timings) {
-    var effect = this.context.createGainNode();
+    var effect = this.context.createGain();
     effect.timings = timings;
     effect.gain.value = 1;
     effect.splitter = this.context.createChannelSplitter(2);
-    effect.delayL = this.context.createDelayNode();
-    effect.delayR = this.context.createDelayNode();
-    effect.fbGainNode = this.context.createGainNode();
+    effect.delayL = this.context.createDelay();
+    effect.delayR = this.context.createDelay();
+    effect.fbGainNode = this.context.createGain();
     effect.fbGainNode.gain.value = feedbackGain;
     effect.merger = this.context.createChannelMerger(2);
 
@@ -148,7 +157,7 @@ MusicMix.prototype.addTrackToMix = function(trackId, isPowerful) {
     this.tracks[trackId] = {};
 
     var track = this.tracks[trackId]
-    track.gainNode = this.context.createGainNode();
+    track.gainNode = this.context.createGain();
 
 
     if (isPowerful) {
@@ -176,11 +185,11 @@ MusicMix.prototype.addTrackToMix = function(trackId, isPowerful) {
     this.setTrackToDefaultMix(trackId)
 };
 
-MusicMix.prototype.buildStereoChannelSplitter = function(source) {
+MusicMix.prototype.buildStereoChannelSplitter = function(gainNode) {
     var splitter = this.context.createChannelSplitter(2);
-    source.connect(splitter);
-    var gainLeft = this.context.createGainNode();
-    var gainRight = this.context.createGainNode();
+    gainNode.connect(splitter);
+    var gainLeft = this.context.createGain();
+    var gainRight = this.context.createGain();
     splitter.connect(gainLeft, 0);
     splitter.connect(gainRight, 1);
     splitter.right = gainRight;
@@ -264,7 +273,7 @@ MusicMix.prototype.disconnectTrackFxSend = function(track, effectId) {
 
 MusicMix.prototype.connectTrackToFx = function(track, effectId, gain, time) {
     if (!time) time = this.context.currentTime;
-    this.tracks[track].fxSends[effectId] = this.context.createGainNode();
+    this.tracks[track].fxSends[effectId] = this.context.createGain();
     this.tracks[track].fxSends[effectId].connect(this.effects[effectId])
     this.tracks[track].gainNode.connect(this.tracks[track].fxSends[effectId])
     this.tracks[track].fxSends[effectId].gain.linearRampToValueAtTime(gain, time)

@@ -86,7 +86,7 @@ WaveSynth.prototype.play = function(frequency, duration, velocity) {
     // Create an audio node for the tone generator
     var velocity = velocity;
 
-    var gainNode = this.context.createGainNode();
+    var gainNode = this.context.createGain();
     gainNode.gain.value = 0;
 
     music.musicMix.connectNodeToMixTrack(gainNode, music.ENUMS.channels.ws)
@@ -99,7 +99,7 @@ WaveSynth.prototype.play = function(frequency, duration, velocity) {
     var now = this.context.currentTime
     gainNode.gain.linearRampToValueAtTime(0 , now)
     music.triggerEvent(music.EVENT.PLAY_CHANNEL_SOUND, music.ENUMS.channels.ws)
-    source.noteOn(0)
+    source.start(0)
     gainNode.gain.linearRampToValueAtTime(0.9 * velocity, now+0.001)
 
     setTimeout(function(){
@@ -112,7 +112,7 @@ WaveSynth.prototype.play = function(frequency, duration, velocity) {
     }(now+duration+1.4)*1000);
 
 
-    source.noteOff(now+duration+1.2)
+    source.stop(now+duration+1.2)
 
     return source;
 };
